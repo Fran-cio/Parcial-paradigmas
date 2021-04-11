@@ -1,0 +1,114 @@
+La idea de este glosario es seguir la ejecucion del programa con el fin simplificar su comprension, se intenta especificar de que manera se 
+ejecutan los elementos del codigo para hacerlo de la misma forma en el proyecto. (Es decir, incluyendo los elementos de prog funcional)
+
+El trabajo se ejecuta en el main en linea 221:
+221,222,...,228 son para que elijas quien arranca
+229 crea un "t" (Que es algo asi como el tablero de juego) que le asigana un newState(1) que recibe un tablero ttest(2)
+
+(1) linea 213:  newState es una funcion que recibe un tablero y un valor que puede ser X o Y segun quien este jugando. 
+				En la linea 218 ejecuta un if por jugada que verifica el estado de juego, si no termino, se ejecuta recursivamente con 
+    			t (Tablero de juego) y otro que va a depender de lo que se juegue. Si la partida termino, retorna t que es el tablero finalizado.
+
+(2) linea 178:  ttest es el variable de tipo tablero(3) compuesto por fila 1 2 y 3. definidas en linea 166,170 y 174 respectivamente
+		
+(3) Linea 22:	Es el constructor de Tablero compuesto por 3 Fila(4)
+
+(4) Linea 20:	Es el constructor de Fila compuesta por 3 Casillas(5)
+
+(5) Linea 14:	Es el constructor de Casilla que tiene 4 parametros, valor::Vcasilla(6) que es la pieza jugada o quien la juega mejor dicho
+				vt::Vteor (Cuanto vale cada casilla con el tablero vacio) y vr::Vreal (Cuanto vale la casilla en la situacion actual del tablero) 
+				que son 2 integer que si no me equivoco dan un valor de priodad la casilla para que la IA sepa que conviene y ttt::[TTT] que es
+				un arreglo de tuplas (Linea 13) de tipo Posic(Linea 11), que guardan todos los trios posibles desde esa posicion.
+
+(6) Linea 9:	un tipo con definido por un Maybe Valor(7)
+
+(7) Linea 4:	Constructor que tiene como valores posibles X o Y, que son las posibles jugadas. 
+
+Siguiendo desde (1), newState verifica a quien le toca, si le toca a X (jugador) ejecuta newStatePlayer(8)
+
+(8) linea 208:	Funcion que recibe el "t" y ejecuta readPos(9), y devuelve la funcio playx(10) que devuelve
+				el t con la jugada X hecha.
+	
+(9) linea 199:	Accion que pide 2 valores de pos entre 1 y 3 para filas y columnas respectivamente, las castea a int
+				y las devuelve como una tupla de tipo Posic. Si los valores son incorrectos, los vuelve a pedir
+
+(10) linea 149: recibe p::posic y t::Tablero, para devolver putval(11) ya con X como jugador
+
+(11) linea 43:	funcion que recibe x::Valor (como X o Y), [f,c]::Posic (donde f va a ser la fila y c la columna)
+				y un Tablero con sus respectivas filas diferenciadas. Crea una guarda donde segun la fila va a 
+				crear un tablero con x en la fila correspondiente; donde corresponda ejecuta putrow(12)
+				recibiendo como parametro x, c y la fila a modificar.
+
+(12) linea 37:	De manera analoga con (11) recibimos x::Valor, el c que indica la columna y una Fila con 
+				respectivas columnas (o casillas en este caso). Nuevamente usa una guard donde segun la c
+				creamos una Fila en la cual se modifica la casilla a1, a2 y a3 correspondiente a c. 
+				En el lugar que corresponde creamos una Casilla donde dejamos todos los parametros identicos
+				salvo por Valor en el cual colocamos "Just x" (Ya que (6) es Maybe), las columnas que no 
+				corresponden se dejan como estan.
+
+Con la hipotetica jugada de X hecha, volvemos a (1), y en este caso le corresponde jugar a la IA; ejecutando 
+bestplay(13) recibiendo a "t" como parametro.
+
+(13) linea 133:	bestplay ejecuta playy(14) analogo a (10) pero esta vez juega la IA, donde ejecuta a bestpos(15)
+				que devulve una Posic, y ademas recibe el tablero
+
+(14) linea 145: ejecuta (11) de la misma manera que (10) pero esta vez pasa a Y como jugador (osea la IA)
+
+(15) linea 136:	busca la mejor jugada en el tablero que le pases, para esto usa foldl con una funcion maxpos(16)
+				que compara 2 casillas y devuelve la que mayor Vreal tenga. Para esto pasamos una casilla hipotetica
+				con el formato ([Posic], Vreal) en ([0,0],0) y la que devuelva evaltablero(17). Esto nos devuelve una
+				tupla con el formato anterior descripto y con fst obtenemos Posic.
+
+(16) linea 139:	recibe 2 casillas con su Posic y el Vreal, los compara y devuelve el de mayot Vreal
+
+(17) linea 142: hace un map generando una tupla mediante una lamda, en la cual x::Posic que se obtiene dede la funcion
+				allpos(18) que nos da un arreglo de todas las posiciones. Y el Vreal lo sacamos de una funcion evalpos(19)
+				que va a evaluar la Posic x con el "t" que le pasamos. 
+
+(18) linea 151:	Devuelve un arreglo con todas las Posic del tablero
+
+(19) linea 92:	Evalua cuanto conviene jugar en esa casilla; para ello utiliza evalttts(21) que obtiene el vector ttt con
+				getvalttt(20)
+
+(20) linea 89: 	Devuelve el vector ttt de la casilla; esto lo hace mediante getrowgeneric(22) que es un getter generico y lo
+				setea para que pida el parametro ttt especificamente.
+
+(22) linea 71:	Filtra mediante una guard el parametro Posic que le pasamos, el valor de la fila y segun cual es este ejecut 
+				gervalgeneric(23) que es un getter generico para las casillas de una fila. Notar que el parametro f que aparece, 
+				no es mas que el parametro el cual queremos obtener, esto se logra mediante la currificacion.
+			
+(23) linea 65:	Filtra mediante una guard el parametro c que es la columna de la casilla que queremos obtener y ahi se ejecuta f
+				que mediante currificacion devuelve el parametro deseado
+
+(21) linea 95:	mediante los parametros tablero, Posic y el vector de ttt, evalttts va a obtener el mayor de los valores mediante 
+				un foldl de un vector con todos los valores reales que vamos a obtener aplicando evalttt(24) a el arreglo de ttt
+				mediante un map
+
+(24) linea 98:	Con este voy a ser sintetico. Es una guard que chequea en que situacion respecto al tablero se encuentra la casilla
+				que estoy evaluando; para esto, verfica cada en cada caso si la casilla esta ocupada, si hay 2 mios en posicion de trio
+				si el rival lo esta, si tengo 1 mio, 1 del rival, si el tablero esta vacio (en esta caso va a tomar el valor teorico), etc.
+				Ver cada metodo es sencillo, en todos los casos de chequeo utiliza ttttoval(25) o getval(26) para verificar su valor o su entorno.
+				Tambien se ve el metodo count(27), que mira cuantos elementos con el Valor determinado hay en ttt. Para cada caso se le asigna
+				un valor de 0 a 10, identificando como la mas conveniente. De ahi la IA va a decidir que casilla ocupar.
+
+(25) linea 109:	hace un map del vector ttt con la funcion getval, el cual va a retornar el parametro Valor (X o Y)
+
+(26) linea 80:	al igual que (20), pero esta vez setea el parametro currificado como Valor
+
+(27) linea 130: Tan solo determina la longitud del arreglo resultante de los elementos iguales al Valor que le asignamos en el arreglo que le pasemos
+
+Y Nuevamente volvemos a (1) donde se hace un print de las jugadas, del tablero y mediante un if verificamos si la partida finalizo con finished(28),
+si esta no termino, ejecuta Nuevamente newState con el siguiente turno y si si termino, sale de la retorna el tablero terminado y vuelve al main
+
+(28) linea 189:	verifica si se dio la situacion gano(29) o si no hay mas casillas disponibles con nofreePlace (31)
+
+(29) linea 180:	devuelve True si alguno (any) de todas(all) las z talque z==just Valor tiene como un arreglo ttt igual a alguno de los elementos de alltrios(30)
+				todo implementado con Lambdas
+		
+(30) linea 154: arreglo de TTT con todas ttt que son victoriosas
+
+(31) linea 186: mediante un all verfica que todos los elementos resultantes del map con la lambda de getval y el arreglo allpos, sean disintos de Nothing 
+
+Nuevamente en el Main, se imprime el resultado(32) del tablero.
+
+(32) linea 192:	Con una guarda y el metodo gano, verifica cual gano y de no ser asi, lo da por empate	
