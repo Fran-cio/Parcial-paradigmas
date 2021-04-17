@@ -28,10 +28,9 @@ public:
     }
 
     optional<char> getValor() {
-        if(valor==nullopt){
+        if (valor.has_value())
             return valor;
-        }
-        return 'O';
+        return '0';
     }
 };
 
@@ -39,10 +38,27 @@ public:
 struct Posic {
 public:
     int p[2];
+    Posic(){}
 
     Posic(int f, int c) {
         p[0] = f;
         p[1] = c;
+    }
+
+    void readPos(){
+        int f,c;
+        cout<<"Fila:";
+        cin>>f;
+        cout<<"Columna:";
+        cin>>c;
+        if((f==1||f==2||f==3)&&(c==1||c==2||c==3)){
+            this->p[0]=f;
+            this->p[1]=c;
+        }
+        else{
+            cout<<"valores invalidos"<<endl;
+            this->readPos();
+        }
     }
 };
 
@@ -64,10 +80,10 @@ public:
 
 class Casilla {
 public:
-    Valor *Vcasilla;                   //Es opcional por si es nulo, necesario segun la consigna
+    Valor *Vcasilla = new Valor();                   //Es opcional por si es nulo, necesario segun la consigna
     int Vteor;
     int Vreal;
-    TTT *ttt[];                                 //Esto es un arreglo de TTT que ya de por si es un arreglo de tuplas
+    TTT *ttt[4];                                 //Esto es un arreglo de TTT que ya de por si es un arreglo de tuplas
     //Ojo al piojo
     Casilla() {
 
@@ -173,6 +189,19 @@ public:
                 break;
         }
     }
+    void putrow(int c, Valor *v){
+        switch (c) {
+            case 1:
+                this->c1->Vcasilla=v;
+                break;
+            case 2:
+                this->c2->Vcasilla=v;
+                break;
+            case 3:
+                this->c3->Vcasilla=v;
+                break;
+        }
+    }
 };
 
 class Tablero { //A implementar. Solo notar que cada tablero tiene 3 filas con sus respectivas columnas/casillas
@@ -189,9 +218,9 @@ public:
 /*
     Tablero newState(Valor *valor) {
         if (valor->getValor() == 'X')
-            return newStatePlayer();
+            return newStatePlayer(); //Por que pusiste return aca??
         else
-            return bestPlay();
+            return bestPlay();      //Por que pusiste return aca??
 
         if (valor->getValor() == 'Y')
             cout << "player";
@@ -210,25 +239,51 @@ public:
             newState(otro);
         }
     }
-
-    Tablero newStatePlayer() {
-
+*/
+    void newStatePlayer() {
+        Posic *p= new Posic();
+        p->readPos();
+        this->playx(p);
+    }
+    void playx(Posic *p){
+        Valor *v=new Valor('X');
+        this->putval(v,p);
     }
 
-    Tablero bestPlay() {
+    /*Tablero bestPlay() {
 
+    }*/
+    void putval(Valor *v,Posic *p) {
+        int f = p->p[0];
+        int c = p->p[1];
+
+        switch (f) {
+            case 1:
+                this->f1->putrow(c, v);
+                break;
+            case 2:
+                this->f2->putrow(c, v);
+                break;
+            case 3:
+                this->f3->putrow(c, v);
+                break;
+        }
     }
 
     bool finished() {
 
     }
-    */
+
     void printTablero() {
-        cout << this->f1->c1->Vcasilla->getValor()<<"     "<<this->f1->c2->Vcasilla->getValor()<<"     "<<this->f1->c3->Vcasilla->getValor()<<'\n'<<
-                this->f2->c1->Vcasilla->getValor()<<"     "<<this->f2->c2->Vcasilla->getValor()<<"     "<<this->f2->c3->Vcasilla->getValor()<<'\n'<<
-                this->f1->c1->Vcasilla->getValor()<<"     "<<this->f1->c2->Vcasilla->getValor()<<"     "<<this->f1->c3->Vcasilla->getValor()<<'\n';
+        cout << this->f1->c1->Vcasilla->getValor().value() << "     " << this->f1->c2->Vcasilla->getValor().value()
+             << "     " << this->f1->c3->Vcasilla->getValor().value() << '\n' <<
+             this->f2->c1->Vcasilla->getValor().value() << "     " << this->f2->c2->Vcasilla->getValor().value()
+             << "     " << this->f2->c3->Vcasilla->getValor().value() << '\n' <<
+             this->f3->c1->Vcasilla->getValor().value() << "     " << this->f3->c2->Vcasilla->getValor().value()
+             << "     " << this->f3->c3->Vcasilla->getValor().value() << '\n';
     }
-};
+//*/
+ };
 /*---------------------------------FUNCIONES-------------------------*/
 
 int main() {
@@ -245,9 +300,9 @@ int main() {
         cout<<"Entrada no valida. :(";
     t->newState(valor);
    */
-    t->f1->c1->Vcasilla->setValor('X');
-    t->f2->c2->Vcasilla->setValor('X');
-    t->f3->c3->Vcasilla->setValor('X');
+    t->newStatePlayer();
+    t->newStatePlayer();
+    t->newStatePlayer();
     t->printTablero();
     return 0;
 }
