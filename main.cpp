@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <vector>
 #include <optional>
+#include <tuple>
 
 using namespace std;
 /*--------------------------------CLASES----------------------------*/
@@ -215,12 +216,13 @@ public:
         f2 = new Fila(2);
         f3 = new Fila(3);
     }
+
 /*
     Tablero newState(Valor *valor) {
         if (valor->getValor() == 'X')
-            return newStatePlayer(); //Por que pusiste return aca??
+            this->newStatePlayer();
         else
-            return bestPlay();      //Por que pusiste return aca??
+            this->bestPlay();
 
         if (valor->getValor() == 'Y')
             cout << "player";
@@ -230,13 +232,13 @@ public:
         printTablero();
 
         if (!finished()) {
-            Valor otro;
+            Valor* otro = new Valor();
             if(valor->getValor() == 'Y')
                 otro.setValor('X');
             else
                 otro.setValor('Y');
 
-            newState(otro);
+            return this->newState(otro);
         }
     }
 */
@@ -251,9 +253,17 @@ public:
     }
 
     /*Tablero bestPlay() {
-
+        this->playy(this->bestpos())
     }*/
-    void putval(Valor *v,Posic *p) {
+/*
+    Posic bestpos(){
+        Posic *p= new Posic(0,0);
+        int Vr=0;
+        tuple<Posic,int> tu (p,Vr);
+        get<0>()
+    }
+    */
+    void putval(Valor *v, Posic *p) {
         int f = p->p[0];
         int c = p->p[1];
 
@@ -271,7 +281,7 @@ public:
     }
 
     bool finished() {
-
+        return false;
     }
 
     void printTablero() {
@@ -282,8 +292,16 @@ public:
              this->f3->c1->Vcasilla->getValor().value() << "     " << this->f3->c2->Vcasilla->getValor().value()
              << "     " << this->f3->c3->Vcasilla->getValor().value() << '\n';
     }
-//*/
- };
+};
+
+tuple<Posic, int> maxpos(tuple<Posic, int> a, tuple<Posic, int> b) {
+    if (get<1>(a) > get<1>(b)) {
+        return a;
+    } else {
+        return b;
+    }
+}
+
 /*---------------------------------FUNCIONES-------------------------*/
 
 int main() {
@@ -300,9 +318,7 @@ int main() {
         cout<<"Entrada no valida. :(";
     t->newState(valor);
    */
-    t->newStatePlayer();
-    t->newStatePlayer();
-    t->newStatePlayer();
-    t->printTablero();
+    Posic *p;
+    p = t->allPos()
     return 0;
 }
