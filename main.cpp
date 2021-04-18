@@ -1,9 +1,8 @@
 #include <string>
 #include <functional>
 #include <iostream>
-#include<fstream>
-#include<string>
-#include<sstream>
+#include <fstream>
+#include <sstream>
 #include <unistd.h>
 #include <vector>
 #include <optional>
@@ -66,15 +65,15 @@ public:
 //La clase TTT le vamos a meter las 3 combinaciones de casillas que van a dar tateti
 struct TTT {
 public:
-    Posic *t[3];                                    //Por eso cada arreglo tiene 3 lugares
+    vector<Posic*> t;                                    //Por eso cada arreglo tiene 3 lugares
     TTT() {                                          //no sabes lo que renegue hasta que me faltaba el constructor vacio
 
     }
 
     TTT(int f1, int c1, int f2, int c2, int f3, int c3) { //Los cargo manualmente, solo eso
-        t[0] = new Posic(f1, c1);
-        t[1] = new Posic(f2, c2);
-        t[2] = new Posic(f3, c3);
+        t.push_back(new Posic(f1, c1));
+        t.push_back(new Posic(f2, c2));
+        t.push_back(new Posic(f3, c3));
     }
 
 };
@@ -84,7 +83,7 @@ public:
     Valor *Vcasilla = new Valor();                   //Es opcional por si es nulo, necesario segun la consigna
     int Vteor;
     int Vreal;
-    TTT *ttt[4];                                 //Esto es un arreglo de TTT que ya de por si es un arreglo de tuplas
+    vector<TTT*> ttt;                                 //Esto es un arreglo de TTT que ya de por si es un arreglo de tuplas
     //Ojo al piojo
     Casilla() {
 
@@ -95,62 +94,62 @@ public:
             case 1:                             //Creo que no hace falta complicarse mas. Los valores irian de 1 arriba
                 Vteor = 3;                      //a la derecha hasta el 9 abajo a la izquierda.
                 Vreal = 3;
-                ttt[0] = new TTT(1, 1, 1, 2, 1, 3);
-                ttt[1] = new TTT(1, 1, 2, 2, 3, 3);
-                ttt[2] = new TTT(1, 1, 2, 1, 3, 1);
+                ttt.push_back(new TTT(1, 1, 1, 2, 1, 3));
+                ttt.push_back(new TTT(1, 1, 2, 2, 3, 3));
+                ttt.push_back(new TTT(1, 1, 2, 1, 3, 1));
                 break;
             case 2:
                 Vteor = 2;
                 Vreal = 2;
-                ttt[0] = new TTT(1, 2, 2, 2, 3, 2);
-                ttt[1] = new TTT(1, 1, 1, 2, 1, 3);
+                ttt.push_back(new TTT(1, 2, 2, 2, 3, 2));
+                ttt.push_back(new TTT(1, 1, 1, 2, 1, 3));
                 break;
             case 3:
                 Vteor = 3;
                 Vreal = 3;
-                ttt[0] = new TTT(1, 3, 2, 3, 3, 3);
-                ttt[1] = new TTT(1, 3, 2, 3, 3, 3);
-                ttt[2] = new TTT(1, 3, 2, 2, 3, 1);
+                ttt.push_back(new TTT(1, 3, 2, 3, 3, 3));
+                ttt.push_back(new TTT(1, 3, 2, 3, 3, 3));
+                ttt.push_back(new TTT(1, 3, 2, 2, 3, 1));
                 break;
             case 4:
                 Vteor = 2;
                 Vreal = 2;
-                ttt[0] = new TTT(2, 1, 2, 2, 2, 3);
-                ttt[1] = new TTT(1, 1, 2, 2, 3, 3);
+                ttt.push_back(new TTT(2, 1, 2, 2, 2, 3));
+                ttt.push_back(new TTT(1, 1, 2, 2, 3, 3));
                 break;
             case 5:
                 Vteor = 4;
                 Vreal = 4;
-                ttt[0] = new TTT(1, 1, 2, 2, 3, 3);
-                ttt[1] = new TTT(2, 1, 2, 2, 2, 3);
-                ttt[2] = new TTT(1, 2, 2, 2, 3, 2);
-                ttt[3] = new TTT(3, 1, 2, 2, 1, 3);
+                ttt.push_back(new TTT(1, 1, 2, 2, 3, 3));
+                ttt.push_back(new TTT(2, 1, 2, 2, 2, 3));
+                ttt.push_back(new TTT(1, 2, 2, 2, 3, 2));
+                ttt.push_back(new TTT(3, 1, 2, 2, 1, 3));
                 break;
             case 6:
                 Vteor = 2;
                 Vreal = 2;
-                ttt[0] = new TTT(1, 3, 2, 3, 3, 3);
-                ttt[1] = new TTT(2, 1, 2, 2, 2, 3);
+                ttt.push_back(new TTT(1, 3, 2, 3, 3, 3));
+                ttt.push_back(new TTT(2, 1, 2, 2, 2, 3));
                 break;
             case 7:
                 Vteor = 3;
                 Vreal = 3;
-                ttt[0] = new TTT(3, 1, 3, 2, 3, 3);
-                ttt[1] = new TTT(1, 1, 2, 2, 3, 3);
-                ttt[2] = new TTT(3, 1, 2, 2, 1, 3);
+                ttt.push_back(new TTT(3, 1, 3, 2, 3, 3));
+                ttt.push_back(new TTT(1, 1, 2, 2, 3, 3));
+                ttt.push_back(new TTT(3, 1, 2, 2, 1, 3));
                 break;
             case 8:
                 Vteor = 2;
                 Vreal = 2;
-                ttt[0] = new TTT(3, 2, 2, 2, 1, 2);
-                ttt[1] = new TTT(3, 1, 3, 2, 3, 3);
+                ttt.push_back(new TTT(3, 2, 2, 2, 1, 2));
+                ttt.push_back(new TTT(3, 1, 3, 2, 3, 3));
                 break;
             case 9:
                 Vteor = 3;
                 Vreal = 3;
-                ttt[0] = new TTT(1, 3, 2, 3, 3, 3);
-                ttt[1] = new TTT(3, 1, 3, 2, 3, 3);
-                ttt[2] = new TTT(1, 1, 2, 2, 3, 3);
+                ttt.push_back(new TTT(1, 3, 2, 3, 3, 3));
+                ttt.push_back(new TTT(3, 1, 3, 2, 3, 3));
+                ttt.push_back(new TTT(1, 1, 2, 2, 3, 3));
                 break;
         }
     }
@@ -158,6 +157,9 @@ public:
     void setValor(char c) {
         Vcasilla->setValor(c);
     }
+
+
+
 };
 
 
@@ -200,6 +202,19 @@ public:
                 break;
             case 3:
                 this->c3->Vcasilla=v;
+                break;
+        }
+    }
+    auto getvalgeneric(int c, function<auto(Casilla *c)> fu){
+        switch (c) {
+            case 1:
+                return fu(this->c1);
+                break;
+            case 2:
+                return fu(this->c2);
+                break;
+            case 3:
+                return fu(this->c3);
                 break;
         }
     }
@@ -294,12 +309,25 @@ public:
     }
 };
 
-tuple<Posic, int> maxpos(tuple<Posic, int> a, tuple<Posic, int> b) {
+tuple<Posic*, int> maxpos(tuple<Posic*, int> a, tuple<Posic*, int> b) {
     if (get<1>(a) > get<1>(b)) {
         return a;
     } else {
         return b;
     }
+}
+
+int getVreal(Casilla *c){
+    return c->Vreal;
+}
+int getVteor(Casilla *c){
+    return c->Vteor;
+}
+auto getVcasilla(Casilla *c){
+    return c->Vcasilla;
+}
+auto getttt(Casilla *c){
+    return c->ttt;
 }
 
 /*---------------------------------FUNCIONES-------------------------*/
@@ -318,7 +346,14 @@ int main() {
         cout<<"Entrada no valida. :(";
     t->newState(valor);
    */
-    Posic *p;
-    p = t->allPos()
+    /*t->newStatePlayer();
+    t->newStatePlayer();
+    t->newStatePlayer();
+    t->newStatePlayer();
+    t->newStatePlayer();
+     */
+    t->printTablero();
+    cout<<t->f1->getvalgeneric(1,function<int(Casilla *c)> getVreal)
+    //No puedo hacer andar lo generics, no se si se puede...
     return 0;
 }
