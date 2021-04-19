@@ -144,6 +144,14 @@ public:
     }
 };
 
+auto getVcasilla(Casilla c){return c.Vcasilla;}
+
+int getVteor(Casilla casilla) {return casilla.Vteor;}
+
+auto getVreal(Casilla casilla) {return casilla.Vreal;}
+
+auto getttt(Casilla c){return c.ttt;}
+
 class Fila { //A implementar. Solo notar que cada Fila tiene sus 3 columnas/casillas que predefini en el constructor de casilla
 public:
     Casilla c1;
@@ -194,6 +202,9 @@ public:
             case 3:
                 return funcion(this->c3);
         }
+    }
+    Valor getValRow (int columna) {
+        return getvalgeneric<Valor>(columna, getVcasilla);
     }
 };
 
@@ -263,10 +274,10 @@ public:
     }
 
     int evalpos(Posic p){
-    //necesito evalttts
+        //necesito evalttts
     }
     int evalttts(Posic p,vector<TTT> ttt){
-    //necesito evalttt y ttts
+        //necesito evalttt y ttts
     }
     int evalttt (Posic posicion, TTT ttt) {
 
@@ -294,13 +305,13 @@ public:
     }
 
 //---------------------------------jugadas------------------------------
-vector<Valor> tttToVal(TTT jugadas) {
+    vector<Valor> tttToVal(TTT jugadas) {
         vector<Valor> valores;
         return transform(jugadas.t.begin(),jugadas.t.end(),valores.begin(),[]   (Posic pos)    { return getVal(pos); }  );
     }
 
-bool trioVacio(TTT jugadas) {
-        jugadas.t
+    bool trioVacio(TTT jugadas) {
+        //  jugadas.t
     }
 
 
@@ -344,6 +355,9 @@ bool trioVacio(TTT jugadas) {
              this->f3.c1.Vcasilla.getValor().value() << "     " << this->f3.c2.Vcasilla.getValor().value()
              << "     " << this->f3.c3.Vcasilla.getValor().value() << '\n';
     }
+    Valor getVal (Posic pos) {
+        return getrowgeneric<Valor>(pos, getVcasilla);
+    }
 
 };
 
@@ -355,9 +369,6 @@ tuple<Posic, int> maxpos(tuple<Posic, int> a, tuple<Posic, int> b) {
     }
 }
 
-Valor getVal (Posic pos) {
-    return getrowgeneric<Valor>(pos, getVcasilla);
-}
 /*---------------------------------FUNCIONES-------------------------*/
 
 int main() {
@@ -385,6 +396,7 @@ int main() {
     Posic n= Posic();
     n.p[0]=1;
     n.p[1]=2;
+    cout<<":(";
     cout<<*(t.getrowgeneric<Valor>(n, getVcasilla).getValor());
     return 0;
 }
