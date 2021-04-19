@@ -279,13 +279,13 @@ public:
 
         switch (f) {
             case 1:
-                this->f1.getvalgeneric<T>(c,fu);
+                return this->f1.getvalgeneric<T>(c,fu);
                 break;
             case 2:
-                this->f2.getvalgeneric<T>(c,fu);
+                return this->f2.getvalgeneric<T>(c,fu);
                 break;
             case 3:
-                this->f3.getvalgeneric<T>(c,fu);
+                return this->f3.getvalgeneric<T>(c,fu);
                 break;
         }
     }
@@ -381,8 +381,6 @@ int main() {
     Posic n= Posic();
     n.p[0]=1;
     n.p[1]=2;
-    t.printTablero();
-    cout<<t.getrowgeneric<int>(n, getVreal);
-    cout<<t.f1.getvalgeneric<int>(2, getVreal);
+    cout<<*(t.getrowgeneric<Valor>(n, getVcasilla).getValor());
     return 0;
 }
