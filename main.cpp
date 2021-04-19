@@ -15,10 +15,11 @@ class Valor {
 private:
     optional<char> valor;
 public:
-    Valor(){}
-    Valor(char c) {valor = c;}
+    Valor() {}
 
-    void setValor(char c) {valor = c;}
+    Valor(char c) { valor = c; }
+
+    void setValor(char c) { valor = c; }
 
     optional<char> getValor() {
         if (valor.has_value())
@@ -31,25 +32,25 @@ public:
 struct Posic {
 public:
     int p[2];
-    Posic(){}
+
+    Posic() {}
 
     Posic(int f, int c) {
         p[0] = f;
         p[1] = c;
     }
 
-    void readPos(){
-        int f,c;
-        cout<<"Fila:";
-        cin>>f;
-        cout<<"Columna:";
-        cin>>c;
-        if((f==1||f==2||f==3)&&(c==1||c==2||c==3)){
-            this->p[0]=f;
-            this->p[1]=c;
-        }
-        else{
-            cout<<"valores invalidos"<<endl;
+    void readPos() {
+        int f, c;
+        cout << "Fila:";
+        cin >> f;
+        cout << "Columna:";
+        cin >> c;
+        if ((f == 1 || f == 2 || f == 3) && (c == 1 || c == 2 || c == 3)) {
+            this->p[0] = f;
+            this->p[1] = c;
+        } else {
+            cout << "valores invalidos" << endl;
             this->readPos();
         }
     }
@@ -144,13 +145,13 @@ public:
     }
 };
 
-auto getVcasilla(Casilla c){return c.Vcasilla;}
+auto getVcasilla(Casilla c) { return c.Vcasilla; }
 
-int getVteor(Casilla casilla) {return casilla.Vteor;}
+int getVteor(Casilla casilla) { return casilla.Vteor; }
 
-auto getVreal(Casilla casilla) {return casilla.Vreal;}
+auto getVreal(Casilla casilla) { return casilla.Vreal; }
 
-auto getttt(Casilla c){return c.ttt;}
+auto getttt(Casilla c) { return c.ttt; }
 
 class Fila { //A implementar. Solo notar que cada Fila tiene sus 3 columnas/casillas que predefini en el constructor de casilla
 public:
@@ -179,16 +180,17 @@ public:
                 break;
         }
     }
-    void putrow(int c, Valor v){
+
+    void putrow(int c, Valor v) {
         switch (c) {
             case 1:
-                this->c1.Vcasilla=v;
+                this->c1.Vcasilla = v;
                 break;
             case 2:
-                this->c2.Vcasilla=v;
+                this->c2.Vcasilla = v;
                 break;
             case 3:
-                this->c3.Vcasilla=v;
+                this->c3.Vcasilla = v;
                 break;
         }
     }
@@ -251,64 +253,43 @@ public:
         this -> putval(v,p);
     }
 
-    /*
-    void playy(Posic *p) {
-        Valor *v = new Valor('Y')
-        this -> putval(v,p)
-    }
-*/
-    tuple<Posic, int> evalTablero(){
-        vector<Posic*> p;
-        auto allPos=[](vector<Posic*> po) {
-            int a[3] = {1, 2, 3};
-            for (int i:a) {
-                for (int j:a) {
-                    Posic *paux = new Posic(i, j);
-                    po.push_back(paux);
-                }
-            }
-            return po;
-        };
-        p=allPos(p);
-        //transform(p.begin(),p.end(), ) //Necesito evalpos
-    }
+void Tablero::playy(Posic p) {
+    Valor v = Valor('Y');
+    this->putval(v, p);
+}
 
-    int evalpos(Posic p){
-        //necesito evalttts
-    }
-    int evalttts(Posic p,vector<TTT> ttt){
-        //necesito evalttt y ttts
-    }
-    int evalttt (Posic posicion, TTT ttt) {
+//    tuple<Posic, int> Tablero :: evalTablero(){
+//        vector<Posic> p;
+//        auto allPos=[](vector<Posic> po) {
+//            int a[3] = {1, 2, 3};
+//            for (int i:a) {
+//                for (int j:a) {
+//                    Posic paux = Posic(i, j);
+//                    po.push_back(paux);
+//                }
+//            }
+//            return po;
+//        };
+//        p=allPos(p);
+//        //transform(p.begin(),p.end(), ) //Necesito evalpos
+//    }
 
-    }
-    vector<TTT> getvalttt(Posic p){
-        return getrowgeneric<vector<TTT>>(p, getttt);
-    }
-
-    template<typename T>
-    T getrowgeneric(Posic p, function<T(Casilla)> fu){
-        int f = p.p[0];
-        int c = p.p[1];
-
-        switch (f) {
-            case 1:
-                return this->f1.getvalgeneric<T>(c, fu);
-                break;
-            case 2:
-                return this->f2.getvalgeneric<T>(c, fu);
-                break;
-            case 3:
-                return this->f3.getvalgeneric<T>(c, fu);
-                break;
-        }
-    }
+//    int Tablero :: evalpos(Posic p){
+//        //necesito evalttts
+//    }
+//    int Tablero :: evalttts(Posic p,vector<TTT> ttt){
+//        //necesito evalttt y ttts
+//    }
+//    int Tablero :: evalttt (Posic posicion, TTT ttt) {
+//
+//    }
 
 //---------------------------------jugadas------------------------------
-    vector<Valor> tttToVal(TTT jugadas) {
-        vector<Valor> valores;
-        return transform(jugadas.t.begin(),jugadas.t.end(),valores.begin(),[]   (Posic pos)    { return getVal(pos); }  );
-    }
+vector<Valor> Tablero::tttToVal(Tablero tablero,TTT jugadas) {
+    vector<Valor> valores;
+    transform(jugadas.t.begin(), jugadas.t.end(), valores.begin(), [&](Posic pos) { return getVal(pos, this); });
+    return valores;
+}
 
     bool trioVacio(TTT jugadas) {
         //  jugadas.t
@@ -326,41 +307,37 @@ public:
 //        get<0>()
 //    }
 
-    void putval(Valor v, Posic p) {
-        int f = p.p[0];
-        int c = p.p[1];
+void Tablero::putval(Valor v, Posic p) {
+    int f = p.p[0];
+    int c = p.p[1];
 
-        switch (f) {
-            case 1:
-                this->f1.putrow(c, v);
-                break;
-            case 2:
-                this->f2.putrow(c, v);
-                break;
-            case 3:
-                this->f3.putrow(c, v);
-                break;
-        }
+    switch (f) {
+        case 1:
+            this->f1.putrow(c, v);
+            break;
+        case 2:
+            this->f2.putrow(c, v);
+            break;
+        case 3:
+            this->f3.putrow(c, v);
+            break;
     }
+}
 
-    bool finished() {
-        return false;
-    }
+bool Tablero::finished() {
+    return false;
+}
 
-    void printTablero() {
-        cout << this->f1.c1.Vcasilla.getValor().value() << "     " << this->f1.c2.Vcasilla.getValor().value()
-             << "     " << this->f1.c3.Vcasilla.getValor().value() << '\n' <<
-             this->f2.c1.Vcasilla.getValor().value() << "     " << this->f2.c2.Vcasilla.getValor().value()
-             << "     " << this->f2.c3.Vcasilla.getValor().value() << '\n' <<
-             this->f3.c1.Vcasilla.getValor().value() << "     " << this->f3.c2.Vcasilla.getValor().value()
-             << "     " << this->f3.c3.Vcasilla.getValor().value() << '\n';
-    }
-    Valor getVal (Posic pos) {
-        return getrowgeneric<Valor>(pos, getVcasilla);
-    }
+void Tablero::printTablero() {
+    cout << this->f1.c1.Vcasilla.getValor().value() << "     " << this->f1.c2.Vcasilla.getValor().value()
+         << "     " << this->f1.c3.Vcasilla.getValor().value() << '\n' <<
+         this->f2.c1.Vcasilla.getValor().value() << "     " << this->f2.c2.Vcasilla.getValor().value()
+         << "     " << this->f2.c3.Vcasilla.getValor().value() << '\n' <<
+         this->f3.c1.Vcasilla.getValor().value() << "     " << this->f3.c2.Vcasilla.getValor().value()
+         << "     " << this->f3.c3.Vcasilla.getValor().value() << '\n';
+}
 
-};
-
+//-----------------------------------------------------------------------------------------------
 tuple<Posic, int> maxpos(tuple<Posic, int> a, tuple<Posic, int> b) {
     if (get<1>(a) > get<1>(b)) {
         return a;
@@ -368,6 +345,7 @@ tuple<Posic, int> maxpos(tuple<Posic, int> a, tuple<Posic, int> b) {
         return b;
     }
 }
+
 
 /*---------------------------------FUNCIONES-------------------------*/
 
