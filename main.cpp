@@ -184,6 +184,17 @@ public:
                 break;
         }
     }
+    template<typename T>
+    T getvalgeneric(int columna,function<T(Casilla)> funcion){
+        switch (columna) {
+            case 1:
+                return funcion(this->c1);
+            case 2:
+                return funcion(this->c2);
+            case 3:
+                return funcion(this->c3);
+        }
+    }
 };
 
 class Tablero { //A implementar. Solo notar que cada tablero tiene 3 filas con sus respectivas columnas/casillas
@@ -204,21 +215,17 @@ public:
             this->newStatePlayer();
         else
             this->bestPlay();
-
         if (valor->getValor() == 'Y')
             cout << "player";
         else
             cout << "machine";
-
         printTablero();
-
         if (!finished()) {
             Valor* otro = new Valor();
             if(valor->getValor() == 'Y')
                 otro.setValor('X');
             else
                 otro.setValor('Y');
-
             return this->newState(otro);
         }
     }
@@ -232,6 +239,58 @@ public:
         Valor v = Valor('X');
         this -> putval(v,p);
     }
+
+    /*
+    void playy(Posic *p) {
+        Valor *v = new Valor('Y')
+        this -> putval(v,p)
+    }
+*/
+    tuple<Posic*, int> evalTablero(){
+        vector<Posic*> p;
+        auto allPos=[](vector<Posic*> po) {
+            int a[3] = {1, 2, 3};
+            for (int i:a) {
+                for (int j:a) {
+                    Posic *paux = new Posic(i, j);
+                    po.push_back(paux);
+                }
+            }
+            return po;
+        };
+        p=allPos(p);
+        //transform(p.begin(),p.end(), )
+    }
+
+    int evalpos(Posic *p){
+
+    }
+    int evalttts(Posic *p,vector<TTT*> ttt){
+
+    }
+    vector<TTT*> getvalttt(Posic *p){
+
+    }
+
+    template<typename T>
+    T getrowgeneric(Posic p, function<T(Casilla)> fu){
+        int f = p.p[0];
+        int c = p.p[1];
+
+        switch (f) {
+            case 1:
+                this->f1.getvalgeneric<T>(c,fu);
+                break;
+            case 2:
+                this->f2.getvalgeneric<T>(c,fu);
+                break;
+            case 3:
+                this->f3.getvalgeneric<T>(c,fu);
+                break;
+        }
+    }
+
+
 
 //    Tablero bestPlay() {
 //        this->playy(this->bestpos())
@@ -285,17 +344,7 @@ tuple<Posic, int> maxpos(tuple<Posic, int> a, tuple<Posic, int> b) {
 
 //-------------------------------------GETERS--------------------------------------------
 
-template<typename T>
-T getvalgeneric(int columna, Fila fila,function<T(Casilla)> funcion){
-    switch (columna) {
-        case 1:
-            return funcion(fila.c1);
-        case 2:
-            return funcion(fila.c2);
-        case 3:
-            return funcion(fila.c3);
-    }
-}
+
 
 int getVteor(Casilla casilla) {return casilla.Vteor;}
 
@@ -328,12 +377,12 @@ int main() {
     t.newStatePlayer();
     t.newStatePlayer();
      */
-    t.f1.c1.Vcasilla.setValor('X');
-    t.f2.c2.Vcasilla.setValor('X');
-    t.f3.c3.Vcasilla.setValor('X');
-    t.f1.c3.Vcasilla.setValor('Y');
-    t.f3.c1.Vcasilla.setValor('Y');
+    t.f1.c2.Vcasilla.setValor('X');
+    Posic n= Posic();
+    n.p[0]=1;
+    n.p[1]=2;
     t.printTablero();
-    cout<<getvalgeneric<int>(2,t.f2, getVreal);
+    cout<<t.getrowgeneric<int>(n, getVreal);
+    cout<<t.f1.getvalgeneric<int>(2, getVreal);
     return 0;
 }
