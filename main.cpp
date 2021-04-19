@@ -246,7 +246,7 @@ public:
         this -> putval(v,p)
     }
 */
-    tuple<Posic*, int> evalTablero(){
+    tuple<Posic, int> evalTablero(){
         vector<Posic*> p;
         auto allPos=[](vector<Posic*> po) {
             int a[3] = {1, 2, 3};
@@ -259,17 +259,20 @@ public:
             return po;
         };
         p=allPos(p);
-        //transform(p.begin(),p.end(), )
+        //transform(p.begin(),p.end(), ) //Necesito evalpos
     }
 
-    int evalpos(Posic *p){
+    int evalpos(Posic p){
+    //necesito evalttts
+    }
+    int evalttts(Posic p,vector<TTT> ttt){
+    //necesito evalttt y ttts
+    }
+    int evalttt (Posic posicion, TTT ttt) {
 
     }
-    int evalttts(Posic *p,vector<TTT*> ttt){
-
-    }
-    vector<TTT*> getvalttt(Posic *p){
-
+    vector<TTT> getvalttt(Posic p){
+        return getrowgeneric<vector<TTT>>(p, getttt);
     }
 
     template<typename T>
@@ -279,17 +282,26 @@ public:
 
         switch (f) {
             case 1:
-                return this->f1.getvalgeneric<T>(c,fu);
+                return this->f1.getvalgeneric<T>(c, fu);
                 break;
             case 2:
-                return this->f2.getvalgeneric<T>(c,fu);
+                return this->f2.getvalgeneric<T>(c, fu);
                 break;
             case 3:
-                return this->f3.getvalgeneric<T>(c,fu);
+                return this->f3.getvalgeneric<T>(c, fu);
                 break;
         }
     }
 
+//---------------------------------jugadas------------------------------
+vector<Valor> tttToVal(TTT jugadas) {
+        vector<Valor> valores;
+        return transform(jugadas.t.begin(),jugadas.t.end(),valores.begin(),[]   (Posic pos)    { return getVal(pos); }  );
+    }
+
+bool trioVacio(TTT jugadas) {
+        jugadas.t
+    }
 
 
 //    Tablero bestPlay() {
@@ -332,6 +344,7 @@ public:
              this->f3.c1.Vcasilla.getValor().value() << "     " << this->f3.c2.Vcasilla.getValor().value()
              << "     " << this->f3.c3.Vcasilla.getValor().value() << '\n';
     }
+
 };
 
 tuple<Posic, int> maxpos(tuple<Posic, int> a, tuple<Posic, int> b) {
@@ -342,18 +355,9 @@ tuple<Posic, int> maxpos(tuple<Posic, int> a, tuple<Posic, int> b) {
     }
 }
 
-//-------------------------------------GETERS--------------------------------------------
-
-
-
-int getVteor(Casilla casilla) {return casilla.Vteor;}
-
-auto getVreal(Casilla casilla) {return casilla.Vreal;}
-
-auto getVcasilla(Casilla c){return c.Vcasilla;}
-
-auto getttt(Casilla c){return c.ttt;}
-
+Valor getVal (Posic pos) {
+    return getrowgeneric<Valor>(pos, getVcasilla);
+}
 /*---------------------------------FUNCIONES-------------------------*/
 
 int main() {
